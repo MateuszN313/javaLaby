@@ -1,0 +1,25 @@
+@startuml
+object MarekKowalski
+object EwaKowalska
+object AnnaDąbrowska
+AnnaDąbrowska-->EwaKowalska : rodzic
+AnnaDąbrowska-->MarekKowalski : rodzic
+object AndrzejKowalski
+AndrzejKowalski-->EwaKowalska : rodzic
+AndrzejKowalski-->MarekKowalski : rodzic
+object KrystynaDąbrowska
+KrystynaDąbrowska-->EwaKowalska : rodzic
+KrystynaDąbrowska-->MarekKowalski : rodzic
+object AlicjaWiśniewska
+AlicjaWiśniewska-->AnnaDąbrowska : rodzic
+object TomaszDąbrowski
+TomaszDąbrowski-->AnnaDąbrowska : rodzic
+object JoannaNowak
+JoannaNowak-->AndrzejKowalski : rodzic
+object KacperKowalski
+KacperKowalski-->AndrzejKowalski : rodzic
+object ElżbietaKowalska
+ElżbietaKowalska-->KacperKowalski : rodzic
+object JanKowalski
+JanKowalski-->KacperKowalski : rodzic
+@enduml

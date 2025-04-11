@@ -12,6 +12,7 @@ public class Person implements Comparable<Person>{
     private LocalDate birthDate;
     private LocalDate deathDate;
     private Set<Person> children;
+    private Set<Person> parents;
 
     public String getName() {
         return name;
@@ -31,11 +32,17 @@ public class Person implements Comparable<Person>{
         this.birthDate = birthDate;
         this.deathDate = deathDate;
         this.children = new HashSet<>();
+        this.parents = new HashSet<>();
     }
 
     public boolean adopt(Person child) {
         if(child == null || child == this) return false;
-        return this.children.add(child);
+
+        boolean adopted = this.children.add(child);
+        if(adopted){
+            child.parents.add(this);
+        }
+        return adopted;
     }
 
     @Override
@@ -133,9 +140,9 @@ public class Person implements Comparable<Person>{
                 }
 
                 if(!parent1FullName.isEmpty()){
-                    Person parent1=peopleMap.get(parent1FullName);
+                    Person parent1 = peopleMap.get(parent1FullName);
                     try{
-                        checkParentAge(parent1,person);
+                        checkParentAge(parent1, person);
                         parent1.adopt(person);
                     }catch (ParentingAgeException e){
                         System.out.println(e.getMessage());
@@ -148,9 +155,9 @@ public class Person implements Comparable<Person>{
                     }
                 }
                 if(!parent2FullName.isEmpty()){
-                    Person parent2=peopleMap.get(parent1FullName);
+                    Person parent2 = peopleMap.get(parent2FullName);
                     try{
-                        checkParentAge(parent2,person);
+                        checkParentAge(parent2, person);
                         parent2.adopt(person);
                     }catch (ParentingAgeException e){
                         System.out.println(e.getMessage());
@@ -178,10 +185,68 @@ public class Person implements Comparable<Person>{
             throw new ParentingAgeException("Rodzic jest mlodszy niz 15 lat w chwili urodzin dziecka");
         }
         if(parent.deathDate != null && parent.deathDate.isBefore(child.birthDate)){
-            throw new ParentingAgeException("Rodzic nie żuje w chwili urodzin dziecka");
+            throw new ParentingAgeException("Rodzic nie żyje w chwili urodzin dziecka");
         }
     }
 
-//    Collections.sort(al, Collections.reverseOrder());
+    public String toUML(){
+        StringBuilder result = new StringBuilder();
+        String fullName = this.name + this.surname;
+        result.append("@startuml\n" +
+                "object " + fullName + "\n");
+        if(!this.parents.isEmpty()){
+            for(Person parent : parents){
+                String parentFullName = parent.name + parent.surname;
+                result.append("object " + parentFullName + "\n" +
+                        fullName + "-->" + parentFullName + " : rodzic\n");
+            }
+        }
+        result.append("@enduml");
 
+        return result.toString();
+    }
+    public static String toUml(List<Person> people){
+        StringBuilder result = new StringBuilder();
+        result.append("@startuml\n");
+
+        List<String> peopleNames= new ArrayList<>();
+        for(Person p : people){
+            String fullName = p.name + p.surname;
+            peopleNames.add(fullName);
+
+            result.append("object " + fullName+"\n");
+            if(!p.parents.isEmpty()){
+                for(Person parent : p.parents){
+                    String parentFullName = parent.name + parent.surname;
+                    if(!peopleNames.contains(parentFullName)){
+                        result.append("object " + parentFullName + "\n");
+                    }
+
+                    result.append(fullName + "-->" + parentFullName + " : rodzic\n");
+                }
+            }
+        }
+        result.append("@enduml");
+
+        return result.toString();
+    }
+
+    public static List<Person> filtered(List<Person> people, String substring){
+       if(substring==null || substring.isEmpty()) return null;
+
+       List<Person> result=new ArrayList<>();
+        for(Person p : people){
+            String fullName = p.name + p.surname;
+            if(fullName.contains(substring)){
+                result.add(p);
+            }
+        }
+        return result;
+    }
+
+    public static List<Person> sortByBirthdate(List<Person> people){
+        List<Person> result = new ArrayList<>(people);
+        result.sort(Comparator.comparing(person -> person.birthDate.getYear()));
+        return result;
+    }
 }

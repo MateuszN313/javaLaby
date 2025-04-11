@@ -5,7 +5,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         Person p1 = new Person("Jan", "Kowalski", LocalDate.of(1980, 1, 12), null);
-        Person p2 = new Person("Kamil", "Nowak", LocalDate.of(1990, 11, 22), null);
+        Person p2 = new Person("Joanna", "Nowak", LocalDate.of(1970, 11, 22), null);
         Person p3 = new Person("Bartłomiej", "Daniluk", LocalDate.of(1999, 1, 17), null);
 
         List<Person> people = new ArrayList<>();
@@ -13,8 +13,8 @@ public class Main {
         people.add(p2);
         people.add(p3);
 
-        p1.adopt(p2);
         p1.adopt(p3);
+        p2.adopt(p3);
 
         System.out.println(p1.getYoungestChild());
         System.out.println(p1.getChildren().get(0));
@@ -33,19 +33,22 @@ public class Main {
             System.out.println(peopleFromCsv.get(1).getChildren());
         }
 
+        PlantUMLRunner.setPath("diagrams");
 
+        String data = "@startuml\n" +
+                "'https://plantuml.com/sequence-diagram\n" +
+                "\n" +
+                "autonumber\n" +
+                "\n" +
+                "Alice -> Bob: Authentication Request\n" +
+                "Bob --> Alice: Authentication Response\n" +
+                "\n" +
+                "Alice -> Bob: Another authentication Request\n" +
+                "Alice <-- Bob: another authentication Response\n" +
+                "@enduml";
 
-//        List<Person> people = List.of(
-//                new Person("Jan", "Kowalski", LocalDate.of(1980, 1, 12)),
-//                new Person("Kamil", "Nowak", LocalDate.of(1990, 11, 22)),
-//                new Person("Bartłomiej", "Daniluk", LocalDate.of(1999, 1, 17))
-//        );
-
-
-
-
-
-
-
+        //PlantUMLRunner.generateUML(peopleFromCsv.get(2).toUML(), PlantUMLRunner.pathToJar, "test");
+        PlantUMLRunner.generateUML(Person.toUml(peopleFromCsv),PlantUMLRunner.pathToJar, "test");
+        System.out.println(Person.sortByBirthdate(people));
     }
 }
