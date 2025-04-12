@@ -1,12 +1,12 @@
-import javax.naming.PartialResultException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.time.DateTimeException;
+import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-public class Person implements Comparable<Person>{
+public class Person implements Comparable<Person>, Serializable{
     private String name;
     private String surname;
     private LocalDate birthDate;
@@ -173,6 +173,7 @@ public class Person implements Comparable<Person>{
 
                 result.add(person);
             }
+            scanner.close();
             return result;
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -187,6 +188,28 @@ public class Person implements Comparable<Person>{
         if(parent.deathDate != null && parent.deathDate.isBefore(child.birthDate)){
             throw new ParentingAgeException("Rodzic nie żyje w chwili urodzin dziecka");
         }
+    }
+
+    public static void toBinaryFile(List<Person> people, String path){
+        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))){
+            oos.writeObject(people);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    @SuppressWarnings("unchecked")
+    public static List<Person> fromBinaryFile(String path){
+        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))){
+            Object obj = ois.readObject();
+            if(obj instanceof List<?>){
+                return (List<Person>) obj;
+            }else{
+                System.out.println("Plik nie zawiera listy osób");
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     public String toUML(){
@@ -247,6 +270,37 @@ public class Person implements Comparable<Person>{
     public static List<Person> sortByBirthdate(List<Person> people){
         List<Person> result = new ArrayList<>(people);
         result.sort(Comparator.comparing(person -> person.birthDate.getYear()));
+        return result;
+    }
+
+    public static List<Person> getDead(List<Person> people){
+        List<Person> result = new ArrayList<>();
+        for(Person person : people){
+            if(person.deathDate != null){
+                result.add(person);
+            }
+        }
+        result.sort(Comparator.comparing(person -> ChronoUnit.DAYS.between(person.birthDate, person.deathDate)));
+        return result.reversed();
+    }
+
+    public static Person getOldestLiving(List<Person> people){
+        List<Person> living = new ArrayList<>();
+        for(Person person : people){
+            if(person.deathDate == null){
+                living.add(person);
+            }
+        }
+        Person result = living.get(0);
+        long resultTime = ChronoUnit.DAYS.between(living.get(0).birthDate, LocalDate.now());
+        long temp;
+        for(Person person : living){
+            temp = ChronoUnit.DAYS.between(person.birthDate, LocalDate.now());
+            if(temp > resultTime){
+                resultTime = temp;
+                result = person;
+            }
+        }
         return result;
     }
 }

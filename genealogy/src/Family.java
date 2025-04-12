@@ -42,7 +42,7 @@ public class Family {
             return null;
         }
 
-        people.sort(Comparator.reverseOrder());
+        people.sort(Collections.reverseOrder());
         return people.toArray(new Person[0]);
     }
 

@@ -35,20 +35,12 @@ public class Main {
 
         PlantUMLRunner.setPath("diagrams");
 
-        String data = "@startuml\n" +
-                "'https://plantuml.com/sequence-diagram\n" +
-                "\n" +
-                "autonumber\n" +
-                "\n" +
-                "Alice -> Bob: Authentication Request\n" +
-                "Bob --> Alice: Authentication Response\n" +
-                "\n" +
-                "Alice -> Bob: Another authentication Request\n" +
-                "Alice <-- Bob: another authentication Response\n" +
-                "@enduml";
-
-        //PlantUMLRunner.generateUML(peopleFromCsv.get(2).toUML(), PlantUMLRunner.pathToJar, "test");
         PlantUMLRunner.generateUML(Person.toUml(peopleFromCsv),PlantUMLRunner.pathToJar, "test");
         System.out.println(Person.sortByBirthdate(people));
+        System.out.println(Person.getDead(peopleFromCsv));
+        System.out.println(Person.getOldestLiving(peopleFromCsv));
+
+        Person.toBinaryFile(people, "resources/family.bin");
+        System.out.println(Person.fromBinaryFile("resources/family.bin"));
     }
 }
