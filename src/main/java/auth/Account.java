@@ -57,7 +57,8 @@ public class Account {
                 statement.setString(2, hashedPassword);
                 statement.executeUpdate();
 
-                ResultSet resultSet = statement.getGeneratedKeys();
+                PreparedStatement idStatement = DatabaseConnection.getConnection().prepareStatement("SELECT last_insert_rowid();");
+                ResultSet resultSet = idStatement.executeQuery();
                 if(resultSet.next())
                     return resultSet.getInt(1);
                 else throw new SQLException();
