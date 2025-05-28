@@ -2,7 +2,12 @@ import database.DatabaseConnection;
 import music.Playlist;
 import music.Song;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,6 +64,27 @@ public class SongTest {
     void testWrongIndexSongsDB(){
         DatabaseConnection.connect("songs.db", "songs");
         assertThrows(IndexOutOfBoundsException.class, () -> Song.Persistence.read(-1));
+        DatabaseConnection.disconnect("songs");
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/songs.csv", numLinesToSkip = 1)
+    void testDBWithCSVFile(String id, String artist, String title, String length){
+        DatabaseConnection.connect("songs.db", "songs");
+        try {
+            PreparedStatement statement = DatabaseConnection.getConnection("songs").prepareStatement(
+                    "SELECT artist, title, length FROM song WHERE id = ?"
+            );
+            statement.setString(1, id);
+            ResultSet rs = statement.executeQuery();
+            if(rs.next()){
+                assertEquals(artist, rs.getString("artist"));
+                assertEquals(title, rs.getString("title"));
+                assertEquals(length, rs.getString("length"));
+            }
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
         DatabaseConnection.disconnect("songs");
     }
 }
