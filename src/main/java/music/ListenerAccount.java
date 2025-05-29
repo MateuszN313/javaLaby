@@ -63,7 +63,7 @@ public class ListenerAccount extends Account {
             }
         }
 
-        private static int getCredits(int id) throws SQLException {
+        public static int getCredits(int id) throws SQLException {
             String sql = "SELECT credits FROM listener_account WHERE id_account = ?";
             PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(sql);
             statement.setInt(1,id);
@@ -74,7 +74,7 @@ public class ListenerAccount extends Account {
             else throw new SQLException();
         }
 
-        private static void addCredits(int id, int amount) throws SQLException {
+        public static void addCredits(int id, int amount) throws SQLException {
             int currentCredits = getCredits(id);
             String sql = "UPDATE listener_account SET credits = ? WHERE id_account = ?";
             PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(sql);
@@ -99,7 +99,7 @@ public class ListenerAccount extends Account {
             return statement.executeQuery().next();
         }
 
-        static ListenerAccount authenticate(String username, String password) throws AuthenticationException {
+        public static ListenerAccount authenticate(String username, String password) throws AuthenticationException {
             Account account = Account.Persistence.authenticate(username, password);
             return new ListenerAccount(account.getId(), account.getUsername());
         }

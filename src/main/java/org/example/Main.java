@@ -2,6 +2,7 @@ package org.example;
 
 import auth.Account;
 import database.DatabaseConnection;
+import music.ListenerAccount;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.naming.AuthenticationException;
@@ -51,22 +52,22 @@ public class Main {
 
         //Zad. 2
 
-        DatabaseConnection.connect("accounts.db");
-        Account.Persistence.init();
-
-        // Register users
-        System.out.println("\n📥 Rejestracja:");
-        Account.Persistence.register("alice", "password123");
-        Account.Persistence.register("bob", "securePass");
-
-        // Authenticate
-        System.out.println("\n🔐 Testowanie logowania:");
-        try{
-            System.out.println("alice/password123: " + Account.Persistence.authenticate("alice", "password123")); // true
-            System.out.println("bob/wrongPass: " + Account.Persistence.authenticate("bob", "wrongPass")); // false
-        }catch(AuthenticationException e){
-            System.err.println(e.getMessage());
-        }
+//        DatabaseConnection.connect("accounts.db");
+//        Account.Persistence.init();
+//
+//        // Register users
+//        System.out.println("\n📥 Rejestracja:");
+//        Account.Persistence.register("alice", "password123");
+//        Account.Persistence.register("bob", "securePass");
+//
+//        // Authenticate
+//        System.out.println("\n🔐 Testowanie logowania:");
+//        try{
+//            System.out.println("alice/password123: " + Account.Persistence.authenticate("alice", "password123")); // true
+//            System.out.println("bob/wrongPass: " + Account.Persistence.authenticate("bob", "wrongPass")); // false
+//        }catch(AuthenticationException e){
+//            System.err.println(e.getMessage());
+//        }
 
         // Fetch account by username
 //        System.out.println("\n📄 Pobieranie konta:");
@@ -83,6 +84,13 @@ public class Main {
 //            }
 //        }
 
+        DatabaseConnection.connect("accounts.db");
+        try {
+            ListenerAccount.Persistence.init();
+            ListenerAccount.Persistence.register("wiesiek","haslo57");
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
         DatabaseConnection.disconnect();
     }
 }
