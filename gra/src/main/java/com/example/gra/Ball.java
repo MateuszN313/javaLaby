@@ -14,19 +14,29 @@ public class Ball extends GraphicsItem {
         this.height = 0.05;
 
         this.moveVector = new Point2D(1,-1).normalize();
-        this.velocity = 0.005;
+        this.velocity = 0.4;
     }
 
     public void setPosition(Point2D position){
         this.x = position.getX() - this.width / 2;
         this.y = position.getY() - this.height / 2;
     }
-    public void updatePosition() {
-        this.x += velocity * moveVector.getX();
-        this.y += velocity * moveVector.getY();
+    public void updatePosition(double elapsedSesconds) {
+        this.x += this.velocity * this.moveVector.getX() * elapsedSesconds;
+        this.y += this.velocity * this.moveVector.getY() * elapsedSesconds;
+    }
 
-        if(this.x < 0) this.x = 0.0 + this.width;
-        if(this.x + this.width > 1) this.x = 1.0 - this.width;
+    public double getTop() {
+        return this.y;
+    }
+    public double getBottom() {
+        return this.y + this.height;
+    }
+    public double getLeft() {
+        return this.x;
+    }
+    public double getRight() {
+        return this.x + this.width;
     }
 
     @Override
@@ -38,5 +48,21 @@ public class Ball extends GraphicsItem {
                 this.width * canvasWidth,
                 this.height * canvasHeight
         );
+    }
+
+    public void bounceHorizontally() {
+        this.moveVector = new Point2D(this.moveVector.getX() * -1, this.moveVector.getY());
+    }
+    public void bounceVertically() {
+        this.moveVector = new Point2D(this.moveVector.getX(), this.moveVector.getY() * -1);
+    }
+    public void bounceFromPaddle(double offset) {
+        double maxAngle = Math.toRadians(60);
+        double angle = offset * maxAngle;
+
+        double dx = Math.sin(angle);
+        double dy = -Math.cos(angle);
+
+        moveVector = new Point2D(dx, dy).normalize();
     }
 }

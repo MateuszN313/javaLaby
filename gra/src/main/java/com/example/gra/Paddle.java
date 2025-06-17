@@ -7,7 +7,7 @@ public class Paddle extends GraphicsItem{
     private final Color color = Color.DARKMAGENTA;
     public Paddle() {
         this.width = 0.13;
-        this.height = 0.03;
+        this.height = 0.01;
         this.x = 0.5;
         this.y = 1.0 - this.height - 0.05;
     }
@@ -27,7 +27,7 @@ public class Paddle extends GraphicsItem{
         double relativeX = mouseX / canvasWidth;
         this.x = relativeX - this.width / 2;
 
-        if(this.x < 0) this.x = 0.0 + this.width;
+        if(this.x < 0) this.x = 0.0;
         if(this.x + this.width > 1) this.x = 1.0 - this.width;
     }
 }
