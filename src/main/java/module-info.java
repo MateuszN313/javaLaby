@@ -1,8 +1,7 @@
-module org.example.kolokwium2_2022 {
+module org.example.kolokwium2_2022.client {
     requires javafx.controls;
     requires javafx.fxml;
 
-
-    opens org.example.kolokwium2_2022 to javafx.fxml;
-    exports org.example.kolokwium2_2022;
+    exports org.example.kolokwium2_2022.client;
+    opens org.example.kolokwium2_2022.client to javafx.fxml;
 }

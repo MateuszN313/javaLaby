@@ -1,3 +1,5 @@
+package org.example.kolokwium2_2022.server;
+
 public class Main {
     public static void main(String[] args) {
         WordBag wordBag = new WordBag();

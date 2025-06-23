@@ -1,3 +1,5 @@
+package org.example.kolokwium2_2022.server;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

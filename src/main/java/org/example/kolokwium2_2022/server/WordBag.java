@@ -1,3 +1,5 @@
+package org.example.kolokwium2_2022.server;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;

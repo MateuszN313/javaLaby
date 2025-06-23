@@ -1,3 +1,5 @@
+package org.example.kolokwium2_2022.server;
+
 import java.io.*;
 import java.net.Socket;
 
