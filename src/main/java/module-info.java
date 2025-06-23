@@ -1,6 +1,8 @@
 module org.example.kolokwium2_2023 {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.desktop;
+    requires javafx.graphics;
 
 
     opens org.example.kolokwium2_2023 to javafx.fxml;

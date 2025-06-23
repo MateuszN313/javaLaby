@@ -1,3 +1,5 @@
+package org.example.kolokwium2_2023;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -60,7 +62,7 @@ public class Client {
 
     public static void main(String[] args) {
         Socket socket = connectToServer("localhost", 5000);
-        send("input.png", socket);
+        send("image.png", socket);
         receive(socket, "output.png");
     }
 }
