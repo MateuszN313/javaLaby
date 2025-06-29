@@ -16,7 +16,7 @@ public class ServerThread extends Thread {
 
     public ServerThread(String host,int port,double x, double y, double r, Color color) {
         try {
-            this.socket = new Socket("localhost", 5000);
+            this.socket = new Socket(host, port);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
